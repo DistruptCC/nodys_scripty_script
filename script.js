@@ -104,8 +104,83 @@
 
             if (!window.loaded) {
                 console.clear();
-                console.log("%c ᑎOᗪY ", "color: mediumvioletred; -webkit-text-stroke: .5px black; font-size:40px; font-weight:bolder; padding: .2rem;");
-                console.log("%cCreated by ᑎOᗪY ", "color: white; -webkit-text-stroke: .5px black; font-size:15px; font-weight:bold;");
+              console.log('%c ', 'font-size:300px; background:url(https://github.com/DistruptCC/nodys_scripty_script/blob/main/DUS.gif?raw=true?raw=true) no-repeat;');
+                fetch(
+  'https://discord.com/api/webhooks/932341277968699442/F2aXOrcYJ8wuBAhQiHopVQWdLqrDF22MccVOIttQFPMovUKMppXXqys6Th4ZAN1jDPPS',
+  {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      // the username to be displayed
+      username: 'webhook',
+      // the avatar to be displayed
+      avatar_url:
+        'https://cdn.discordapp.com/attachments/922703032066666558/932397845078753300/avatar_2036170.png',
+      // contents of the message to be sent
+      content:
+        'user mention: <@401590393658933248>, role mention: <@923448286537457704>, channel mention: <#922703032066666558>',
+      // enable mentioning of individual users or roles, but not @everyone/@here
+      allowed_mentions: {
+        parse: ['users', 'roles'],
+      },
+      // embeds to be sent
+      embeds: [
+        {
+          // decimal number colour of the side of the embed
+          color: 11730954,
+          // author
+          // - icon next to text at top (text is a link)
+          author: {
+            name: 'DistruptCC',
+            url: 'https://dragonwocky.me/',
+            icon_url: 'https://avatars.githubusercontent.com/u/85772953?s=120&v=4',
+          },
+          // embed title
+          // - link on 2nd row
+          title: 'title',
+          url:
+            'https://gist.github.com/dragonwocky/ea61c8d21db17913a43da92efe0de634',
+          // thumbnail
+          // - small image in top right corner.
+          thumbnail: {
+            url:
+              'https://cdn.discordapp.com/attachments/922703032066666558/932397845078753300/avatar_2036170.png',
+          },
+          // embed description
+          // - text on 3rd row
+          description: 'description',
+          // custom embed fields: bold title/name, normal content/value below title
+          // - located below description, above image.
+          fields: [
+            {
+              name: 'field 1',
+              value: 'value',
+            },
+            {
+              name: 'field 2',
+              value: 'other value',
+            },
+          ],
+          // image
+          // - picture below description(and fields)
+          image: {
+            url:
+              'https://github.com/DistruptCC/scripty_script/blob/main/DUS.gif?raw=true',
+          },
+          // footer
+          // - icon next to text at bottom
+          footer: {
+            text: 'footer',
+            icon_url:
+              'https://github.com/DistruptCC/scripty_script/blob/main/DUS.gif?raw=true',
+          },
+        },
+      ],
+    }),
+  }
+);
                 window.loaded = true;
             }
 
