@@ -1,2 +1,2 @@
-# nodys_scripty_script
+scripty_script
 just test
