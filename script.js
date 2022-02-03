@@ -1,33 +1,114 @@
 (function () {
+  let overlayHTML = ` <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<div id="box">
+<button class="ou" id="accordian"> </button>
+    <div class="ou" id="box2">
+        <p class="pdark" id="pdark"> Distrupt </p>
+        <section><label>Answer: [<label id="ans1">...</label>]</label></section>
+        <section><label>Next And Last Answer: [<label id="ans2"></label>]</label></section>
+        <section><label>&nbsp;</label></section>
+        <section><label id="ans3text">Dropdown 1: [<label id="ans3">...</label>]</label></section>
+        <section><label id="ans4text">Dropdown 2: [<label id="ans4">...</label>]</label></section>
+        <section><label id="ans5text">Dropdown 3: [<label id="ans5">...</label>]</label></section>
+        <section><label>&nbsp;</label></section>
+        <section><label>M to toggles Menu</label></section>
+ 
+ 
+    </div>
+    
+</div>
+<style>
+
+#box {
+    z-index: 1090;
+    position: fixed;
+    top: 0;
+    right: 0;}
+#box2 {
+    padding: 15px;
+    margin-bottom: 5px;
+    display: none;
+    border-radius: 25px;};
+section {
+    display: flex;
+    justify-content: space-between;margin:5px;}
+.ou {
+    background-color: #fdfdfd;
+    letter-spacing: 2px;
+    font-weight: none;
+    font-size: 11px;
+    font-family: 'Roboto', sans-serif;
+    color:black;}
+.pdark { 
+   text-align: center;
+   border-bottom:2px solid black;}
+#accordian {
+    width: 100%;
+    border: 0;
+    cursor: pointer;
+    border-radius: 25px;}
+label { font-weight: bold;}
+</style>
+`
+ 
+ 
+function get(x)            { return document.getElementById(x); }
+ 
+let overlay             = document.createElement("div");
+    overlay.innerHTML   = overlayHTML;
+    document.body.appendChild(overlay);
+ 
+let acc                 = get("accordian"),
+    darkToggle          = get("darkToggle")
+ 
+acc.onclick = function() {
+    let panel = get("box2");
+    if (panel.style.display == "grid") panel.style.display = "none";
+    else { panel.style.display = "grid"; }
+}
+ 
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'o') {
+      
+      let panel = get("box2");
+    if (panel.style.display == "grid") panel.style.display = "none";
+    else { panel.style.display = "grid"; }
+    }
+}); 
+  
+
+ 
+ 
     'use strict';
     window.loaded = false;
-
     class Answer {
         constructor(answer, type) {
             this.body = answer;
             this.type = type;
         }
-
+ 
         get isMultiChoice() {
             return this.type == "multiple_choice";
         }
-
+ 
         get isFreeResponse() {
             return this.type == "free_response";
         }
-
+ 
         get isExpression() {
             return this.type == "expression";
         }
-
+ 
         get isDropdown() {
             return this.type == "dropdown";
         }
-
+ 
         log() {
             const answer = this.body;
             const style = "color: coral; -webkit-text-stroke: .5px black; font-size:24px; font-weight:bold;";
-
+ 
             answer.map(ans => {
                 if (typeof ans == "string") {
                     if (ans.includes("web+graphie")) {
@@ -38,17 +119,17 @@
                     }
                 }
             });
-
+ 
             const text = answer.join("\n");
             if (text) {
-                console.log(`%c${text.trim()} `, style);
+                console.log(`${text.trim()}`, style);
             }
         }
-
+ 
         printImage(ans) {
             const url = ans.replace("![](web+graphie", "https").replace(")", ".svg");
             const image = new Image();
-
+ 
             image.src = url;
             image.onload = () => {
                 const imageStyle = [
@@ -58,11 +139,11 @@
                     'background-size: ', this.width, 'px ', this.height, 'px;',
                     'background: url(', url, ');'
                 ].join(' ');
-                console.log('%c ', imageStyle);
+                console.log('', imageStyle);
             };
         }
     }
-
+ 
     const originalFetch = window.fetch;
     window.fetch = function () {
         return originalFetch.apply(this, arguments).then((res) => {
@@ -70,23 +151,23 @@
                 const clone = res.clone();
                 clone.json().then(json => {
                     let item, question;
-
+ 
                     try {
                         item = json.data.assessmentItem.item.itemData;
                         question = JSON.parse(item).question;
                     } catch {
                         let errorIteration = () => { return localStorage.getItem("error_iter") || 0; }
                         localStorage.setItem("error_iter", errorIteration() + 1);
-
+ 
                         if (errorIteration() < 4) {
                             return location.reload();
                         } else {
-                            return console.log("%c An error occurred", "color: red; font-weight: bolder; font-size: 20px;");
+                            return alert("An error occurred");
                         }
                     }
-
+ 
                     if (!question) return;
-
+ 
                     Object.keys(question.widgets).map(widgetName => {
                         switch (widgetName.split(" ")[0]) {
                             case "numeric-input":
@@ -101,146 +182,141 @@
                     });
                 });
             }
-
-            if (!window.loaded) {
-                console.clear();
-              console.log('%c ', 'font-size:300px; background:url(https://github.com/DistruptCC/nodys_scripty_script/blob/main/DUS.gif?raw=true?raw=true) no-repeat;');
-                fetch(
-  'https://discord.com/api/webhooks/923469171516399687/ikaLo3KOTlxdeFk2UZngxPlVcLdEMT3SprHjF6_49Z0WvR1fcDtwmN_JLlrVuQQWshht',
-  {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      // the username to be displayed
-      username: 'webhook',
-      // the avatar to be displayed
-      avatar_url:
-        'https://cdn.discordapp.com/attachments/922703032066666558/932397845078753300/avatar_2036170.png',
-      // contents of the message to be sent
-      content:
-        'user mention: <@401590393658933248>, role mention: <@923448286537457704>, channel mention: <#922703032066666558>',
-      // enable mentioning of individual users or roles, but not @everyone/@here
-      allowed_mentions: {
-        parse: ['users', 'roles'],
-      },
-      // embeds to be sent
-      embeds: [
-        {
-          // decimal number colour of the side of the embed
-          color: 11730954,
-          // author
-          // - icon next to text at top (text is a link)
-          author: {
-            name: 'DistruptCC',
-            url: 'https://dragonwocky.me/',
-            icon_url: 'https://avatars.githubusercontent.com/u/85772953?s=120&v=4',
-          },
-          // embed title
-          // - link on 2nd row
-          title: 'title',
-          url:
-            'https://gist.github.com/dragonwocky/ea61c8d21db17913a43da92efe0de634',
-          // thumbnail
-          // - small image in top right corner.
-          thumbnail: {
-            url:
-              'https://cdn.discordapp.com/attachments/922703032066666558/932397845078753300/avatar_2036170.png',
-          },
-          // embed description
-          // - text on 3rd row
-          description: 'description',
-          // custom embed fields: bold title/name, normal content/value below title
-          // - located below description, above image.
-          fields: [
-            {
-              name: 'field 1',
-              value: 'value',
-            },
-            {
-              name: 'field 2',
-              value: 'other value',
-            },
-          ],
-          // image
-          // - picture below description(and fields)
-          image: {
-            url:
-              'https://github.com/DistruptCC/scripty_script/blob/main/DUS.gif?raw=true',
-          },
-          // footer
-          // - icon next to text at bottom
-          footer: {
-            text: 'footer',
-            icon_url:
-              'https://github.com/DistruptCC/scripty_script/blob/main/DUS.gif?raw=true',
-          },
-        },
-      ],
-    }),
-  }
-);
-                window.loaded = true;
-            }
-
+ 
             return res;
         })
     }
-
+ 
     function freeResponseAnswerFrom(question) {
         const answer = Object.values(question.widgets).map((widget) => {
             if (widget.options?.answers) {
                 return widget.options.answers.map(answer => {
                     if (answer.status == "correct") {
-                        return answer.value;
+                       //alert('freeresponse')
+                       var ans1 = document.getElementById('ans1').innerHTML
+                       var ans2 = document.getElementById('ans2').innerHTML
+                        document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("$", "")
+                      document.getElementById('ans2').innerHTML = (answer.value)
+                      document.getElementById('ans1').innerHTML = (ans2)
+                     document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("$", "")
                     }
-                });
+                 });
+                 
             }
         }).flat().filter((val) => { return val !== undefined; });
-
+ 
         return new Answer(answer, "free_response");
     }
-
+ 
     function multipleChoiceAnswerFrom(question) {
         const answer = Object.values(question.widgets).map((widget) => {
             if (widget.options?.choices) {
                 return widget.options.choices.map(choice => {
                     if (choice.correct) {
-                        return choice.content;
+  						//alert('multichoice')
+                       var ans1 = document.getElementById('ans1').innerHTML
+                       var ans2 = document.getElementById('ans2').innerHTML
+                       
+                       document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("$", "")
+                      
+                      
+             
+                      document.getElementById('ans2').innerHTML = (choice.content)
+                      document.getElementById('ans1').innerHTML = (ans2)
+                      
+                      
+                      
+                      document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("$", "")
                     }
                 });
             }
         }).flat().filter((val) => { return val !== undefined; });
-
+ 
+ 
         return new Answer(answer, "multiple_choice");
     }
-
+ 
     function expressionAnswerFrom(question) {
         const answer = Object.values(question.widgets).map((widget) => {
             if (widget.options?.answerForms) {
                 return widget.options.answerForms.map(answer => {
                     if (Object.values(answer).includes("correct")) {
-                        return answer.value;
+                      //alert('expression')
+                      var ans1 = document.getElementById('ans1').innerHTML
+                      var ans2 = document.getElementById('ans2').innerHTML
+                        document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("$", "")
+                      
+                      
+                      
+                      document.getElementById('ans2').innerHTML = (answer.value)
+                      document.getElementById('ans1').innerHTML = (ans2)
+                      
+                      
+                      
+                      
+                      document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("$", "")
                     }
                 });
             }
         }).flat();
-
+ 
         return new Answer(answer, "expression");
     }
-
+ 
     function dropdownAnswerFrom(question) {
         const answer = Object.values(question.widgets).map((widget) => {
             if (widget.options?.choices) {
                 return widget.options.choices.map(choice => {
                     if (choice.correct) {
-                        return choice.content;
+                        //alert('dropdown')
+                       var ans1 = document.getElementById('ans1').innerHTML
+                       var ans2 = document.getElementById('ans2').innerHTML
+                       var ans3 = document.getElementById('ans3').innerHTML
+                       var ans4 = document.getElementById('ans4').innerHTML
+                       var ans5 = document.getElementById('ans5').innerHTML
+                                                document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans2').innerHTML = document.getElementById('ans2').innerHTML.replace("$", "")
+                      
+                      
+                      
+                      document.getElementById('ans2').innerHTML = (choice.content)
+                      document.getElementById('ans1').innerHTML = (ans2)
+                      
+                      
+                      
+                      
+                      document.getElementById('ans5').innerHTML = (choice.content)
+                      document.getElementById('ans4').innerHTML = (ans5)
+                      document.getElementById('ans3').innerHTML = (ans4)
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                  
+                      
+                      
+                      
+                      
+                     
+                      
+                      
+                      
+                      
+                      document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("![](web+graphie://cdn.kastatic.org/ka-perseus-graphie/", "")
+document.getElementById('ans1').innerHTML = document.getElementById('ans1').innerHTML.replace("$", "")
                     }
                 });
             }
-        }).flat();
-
-        return new Answer(answer, "dropdown");
+        }).flat(); 
+        return new Answer(answer, "dropdown"); 
     }
 })();
